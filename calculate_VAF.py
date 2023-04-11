@@ -49,7 +49,8 @@ def get_vaf_dict(records: vcf.Reader, correct_haploid_gt_values: set) -> dict:
             # don't use the sample.data.DP as sum of AD is not equal to DP
             # -> it means that DP contains information by all reads (not only informative as in AD)
             dp_value = sum(ad_values)
-            gt_value = sample.data.GT
+            gt_value = sample.data.GT.replace('0|0', '0/0').replace('0|1', '0/1').replace(
+                '1|1', '1/1').replace('0/.', './.')
 
             if gt_value in correct_haploid_gt_values and dp_value > 0:
                 if alleles not in cp_alleles_gt_vaf[chr_pos]:
